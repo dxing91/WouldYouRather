@@ -44,7 +44,8 @@ const base = {
   resolve: {
     alias: {
       style: path.resolve(__dirname, 'app/style'),
-      containers: path.resolve(__dirname, 'app/containers')
+      containers: path.resolve(__dirname, 'app/containers'),
+      components: path.resolve(__dirname, 'app/components')
     }
   }
 }
