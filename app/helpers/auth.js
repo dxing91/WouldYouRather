@@ -1,10 +1,10 @@
+import firebase from 'firebase'
+import { ref, firebaseAuth } from 'config/constants'
+
 export default function auth() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve({
-        name: 'Dom',
-        uid: '123'
-      })
-    }, 2000)
-  })
+  return firebaseAuth().signInWithPopup(new firebase.auth.FacebookAuthProvider())
+}
+
+export function logout() {
+  return firebaseAuth().signOut()
 }

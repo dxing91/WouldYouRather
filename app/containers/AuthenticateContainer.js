@@ -7,7 +7,8 @@ import * as userActions from 'store/users'
 
 class AuthenticateContainer extends Component {
   handleAuth = () => {
-    auth().then((user) => this.props.authUser(user.uid))
+    auth()
+    this.props.authUser('123')
   }
 
   render() {
