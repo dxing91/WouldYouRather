@@ -1,46 +1,39 @@
+const AUTH_USER = 'AUTH_USER'
+const UNAUTH_USER = 'UNAUTH_USER'
 
-function test() {
+export function authUser(uid) {
   return {
-    type: 'test'
+    type: AUTH_USER,
+    uid
   }
 }
 
-const initialState = {}
+export function unauthUser() {
+  return {
+    type: UNAUTH_USER
+  }
+}
+
+const initialState = {
+  isAuthed: false,
+  authedId: ''
+}
 
 export default function users(state = initialState, action) {
   switch(action.type) {
-    case 'test':
+    case AUTH_USER:
       return {
-        ...state
+        ...state,
+        isAuthed: true,
+        authedId: action.uid
+      }
+    case UNAUTH_USER:
+      return {
+        ...state,
+        isAuthed: false,
+        authedId: ''
       }
     default:
       return state
   }
 }
-
-// const AUTH_USER = 'AUTH_USER'
-
-// function authUser() {
-//   return {
-//     type: AUTH_USER
-//   }
-// }
-
-// function unauthUser() {
-//   return {
-//     type: UNAUTH_USER
-//   }
-// }
-
-
-// function users(state, action) {
-//   switch(action.type) {
-//     case AUTH_USER:
-//       return {
-//         ...state,
-//         isAuthed
-//       }
-//     default:
-//       return state
-//   }
-// }

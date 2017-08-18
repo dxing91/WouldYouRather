@@ -1,7 +1,7 @@
 import React from 'react'
 import { Router, Route, IndexRoute } from 'react-router'
 import { MainContainer, HomeContainer, AuthenticateContainer,
-  ListContainer, QuestionContainer } from 'containers'
+  ListContainer, QuestionContainer, LogoutContainer } from 'containers'
 
 function getRoutes(history) {
   return (
@@ -11,6 +11,7 @@ function getRoutes(history) {
         <Route path='authenticate' component={AuthenticateContainer} />
         <Route path='list' component={ListContainer} />
         <Route path='question' component={QuestionContainer} />
+        <Route path='logout' component={LogoutContainer} />
       </Router>
     </Router>
   )

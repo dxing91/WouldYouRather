@@ -42,12 +42,7 @@ const base = {
     ]
   },
   resolve: {
-    alias: {
-      style: path.resolve(__dirname, 'app/style'),
-      containers: path.resolve(__dirname, 'app/containers'),
-      components: path.resolve(__dirname, 'app/components'),
-      store: path.resolve(__dirname, 'app/store')
-    }
+    modules: [path.resolve(__dirname, 'app'), 'node_modules']
   }
 }
 
