@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Authenticate } from 'components'
@@ -6,9 +7,14 @@ import auth from 'helpers/auth'
 import * as userActions from 'store/users'
 
 class AuthenticateContainer extends Component {
-  handleAuth = () => {
-    auth()
-    this.props.authUser('123')
+  constructor() {
+    super()
+  }
+
+  handleAuth = (e) => {
+    e.preventDefault()
+    this.props.handleAuth()
+      .then(() => this.context.router.replace('list'))
   }
 
   render() {
@@ -19,6 +25,14 @@ class AuthenticateContainer extends Component {
         onAuth={this.handleAuth} />
     )
   }
+}
+
+AuthenticateContainer.propTypes = {
+  handleAuth: PropTypes.func
+}
+
+AuthenticateContainer.contextTypes = {
+  router: PropTypes.object
 }
 
 function mapStateToProps(state) {

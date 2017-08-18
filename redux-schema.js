@@ -19,7 +19,7 @@
     lastUpdated,
     isFetching,
     error,
-    decesions: {
+    decisions: {
       [decisionId]: {
         author,
         timestamp,
