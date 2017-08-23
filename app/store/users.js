@@ -1,14 +1,21 @@
-import auth, { logout } from 'helpers/auth'
+import auth, { logout, saveUser } from 'helpers/auth'
+import { fetchUserDecisions } from 'helpers/api'
 
+const ADD_USER = 'ADD_USER'
 const AUTH_USER = 'AUTH_USER'
 const UNAUTH_USER = 'UNAUTH_USER'
 const FETCHING_USER = 'FETCHING_USER'
 const FETCHING_USER_FAILURE = 'FETCHING_USER_FAILURE'
 const FETCHING_USER_SUCCESS = 'FETCHING_USER_SUCCESS'
 const REMOVE_FETCHING_USER = 'REMOVE_FETCHING_USER'
-const ADD_USER = 'ADD_USER'
 const ADD_USERS_MADE_DECISIONS = 'ADD_USERS_MADE_DECISIONS'
 const ADD_USER_DECISION = 'ADD_USER_DECISION'
+
+export function addUser() {
+  return {
+    type: ADD_USER
+  }
+}
 
 export function authUser(uid) {
   return {
@@ -50,21 +57,17 @@ export function removeFetchingUser() {
   }
 }
 
-export function addUser() {
-  return {
-    type: ADD_USER
-  }
-}
-
 export function addUserDecision() {
   return {
     type: ADD_USER_DECISION
   }
 }
 
-export function addUsersMadeDecisions() {
+export function addUsersMadeDecisions(uid, decisions) {
   return {
-    type: ADD_USERS_MADE_DECISIONS
+    type: ADD_USERS_MADE_DECISIONS,
+    uid,
+    decisions
   }
 }
 
@@ -77,9 +80,11 @@ export function handleAuth() {
         name: userData.displayName,
         uid: user.uid
       }
-      return dispatch(fetchingUserSuccess(user.uid, userInfo, Date.now()))
+      return dispatch(fetchAndHandleDecisions(user.uid))
+        .then(() => dispatch(fetchingUserSuccess(user.uid, userInfo, Date.now())))
     })
-    .then(({user}) => dispatch(authUser(user.uid)))
+    .then(({user}) => saveUser(user)) 
+    .then((user) => dispatch(authUser(user.uid)))
     .catch((error) => dispatch(fetchingUserFailure()))
   }
 }
@@ -87,6 +92,14 @@ export function handleAuth() {
 export function handleUnauth() {
   return function(dispatch) {
     return logout().then(() => dispatch(unauthUser()))
+  }
+}
+
+export function fetchAndHandleDecisions(uid) {
+  return function(dispatch) {
+    return fetchUserDecisions(uid)
+      .then((decisions) => dispatch(addUsersMadeDecisions(uid, decisions)))
+      .catch((err) => console.warn(err))
   }
 }
 
@@ -115,13 +128,17 @@ function user(state = initialUserState, action) {
 
 const initialState = {
   isAuthed: false,
-  isFetching: false,
+  isFetching: true,
   error: '',
   authedId: ''
 }
 
 export default function users(state = initialState, action) {
   switch(action.type) {
+    // case ADD_USER:
+    //   return {
+    //     ...state
+    //   }
     case AUTH_USER:
       return {
         ...state,
@@ -156,9 +173,18 @@ export default function users(state = initialState, action) {
         ...state,
         isFetching: false
       }
-    case ADD_USER:
-    case ADD_USER_DECISION:
     case ADD_USERS_MADE_DECISIONS:
+      return {
+        ...state,
+        [action.uid]: {
+          ...state[action.uid],
+          decisionsMade: action.decisions
+        }
+      }
+    // case ADD_USER_DECISION:
+    //   return {
+    //     ...state
+    //   }
     default:
       return state
   }

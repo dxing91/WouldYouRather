@@ -18,10 +18,11 @@ class AuthenticateContainer extends Component {
   }
 
   render() {
+    const { isFetching, error } = this.props.users
     return (
       <Authenticate
-        isFetching={false}
-        error={false}
+        isFetching={isFetching}
+        error={error}
         onAuth={this.handleAuth} />
     )
   }

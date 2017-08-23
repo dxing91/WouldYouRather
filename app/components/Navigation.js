@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
+import { ModalContainer } from 'containers'
 
 export default function Navigation({isAuthed}) {
   return isAuthed
     ? <div>
         <Link to='/'>Home</Link>
-        <Link to=''>New Decision</Link>
+        <ModalContainer />
         <Link to='logout'>Log out</Link>
       </div>
     : <div>
