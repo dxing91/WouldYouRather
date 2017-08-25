@@ -7,10 +7,6 @@ import auth from 'helpers/auth'
 import * as userActions from 'store/users'
 
 class AuthenticateContainer extends Component {
-  constructor() {
-    super()
-  }
-
   handleAuth = (e) => {
     e.preventDefault()
     this.props.handleAuth()

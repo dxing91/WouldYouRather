@@ -1,21 +1,15 @@
 import auth, { logout, saveUser } from 'helpers/auth'
-import { fetchUserDecisions } from 'helpers/api'
+import { fetchUserDecisionsFb, addUserDecisionFb, changeDecisionCountFb } from 'helpers/api'
 
-const ADD_USER = 'ADD_USER'
 const AUTH_USER = 'AUTH_USER'
 const UNAUTH_USER = 'UNAUTH_USER'
 const FETCHING_USER = 'FETCHING_USER'
 const FETCHING_USER_FAILURE = 'FETCHING_USER_FAILURE'
 const FETCHING_USER_SUCCESS = 'FETCHING_USER_SUCCESS'
 const REMOVE_FETCHING_USER = 'REMOVE_FETCHING_USER'
-const ADD_USERS_MADE_DECISIONS = 'ADD_USERS_MADE_DECISIONS'
+const ADD_USER = 'ADD_USER'
 const ADD_USER_DECISION = 'ADD_USER_DECISION'
-
-export function addUser() {
-  return {
-    type: ADD_USER
-  }
-}
+const FETCH_USER_DECISIONS = 'FETCH_USER_DECISIONS'
 
 export function authUser(uid) {
   return {
@@ -57,15 +51,26 @@ export function removeFetchingUser() {
   }
 }
 
-export function addUserDecision() {
+export function addUser(user) {
   return {
-    type: ADD_USER_DECISION
+    type: ADD_USER,
+    user,
+    lastUpdated: Date.now()
   }
 }
 
-export function addUsersMadeDecisions(uid, decisions) {
+export function addUserDecision(uid, decisionId, data) {
   return {
-    type: ADD_USERS_MADE_DECISIONS,
+    type: ADD_USER_DECISION,
+    uid,
+    decisionId,
+    data
+  }
+}
+
+export function fetchUserDecisions(uid, decisions) {
+  return {
+    type: FETCH_USER_DECISIONS,
     uid,
     decisions
   }
@@ -97,9 +102,18 @@ export function handleUnauth() {
 
 export function fetchAndHandleDecisions(uid) {
   return function(dispatch) {
-    return fetchUserDecisions(uid)
-      .then((decisions) => dispatch(addUsersMadeDecisions(uid, decisions)))
+    return fetchUserDecisionsFb(uid)
+      .then((decisions) => dispatch(fetchUserDecisions(uid, decisions)))
       .catch((err) => console.warn(err))
+  }
+}
+
+export function addAndHandleDecision(uid, decisionId, data, previousDecision) {
+  return function(dispatch) {
+    return addUserDecisionFb(uid, decisionId, data)
+      .then(() => changeDecisionCountFb(decisionId, data, previousDecision))
+      .then(() => dispatch(addUserDecision(uid, decisionId, data)))
+      .catch((error) => console.warn('Error adding user decision.', error))
   }
 }
 
@@ -110,7 +124,7 @@ const initialUserState = {
     avatar: ''
   },
   lastUpdated: '',
-  decisionsMade: []
+  decisionsMade: {}
 }
 
 function user(state = initialUserState, action) {
@@ -120,6 +134,14 @@ function user(state = initialUserState, action) {
         ...state,
         info: action.user,
         lastUpdated: action.timestamp
+      }
+    case ADD_USER_DECISION:
+      return {
+        ...state,
+        decisionsMade: {
+          ...state.decisionsMade,
+          [action.decisionId]: action.data
+        }
       }
     default:
       return state
@@ -135,10 +157,6 @@ const initialState = {
 
 export default function users(state = initialState, action) {
   switch(action.type) {
-    // case ADD_USER:
-    //   return {
-    //     ...state
-    //   }
     case AUTH_USER:
       return {
         ...state,
@@ -173,7 +191,22 @@ export default function users(state = initialState, action) {
         ...state,
         isFetching: false
       }
-    case ADD_USERS_MADE_DECISIONS:
+    case ADD_USER:
+      return state[action.user.uid]
+        ? state
+        : {
+          ...state,
+          [action.user.uid]: {
+            info: action.user,
+            lastUpdated: action.lastUpdated
+          }
+        }
+    case ADD_USER_DECISION:
+      return {
+        ...state,
+        [action.uid]: user(state[action.uid], action)
+      }
+    case FETCH_USER_DECISIONS:
       return {
         ...state,
         [action.uid]: {
@@ -181,10 +214,6 @@ export default function users(state = initialState, action) {
           decisionsMade: action.decisions
         }
       }
-    // case ADD_USER_DECISION:
-    //   return {
-    //     ...state
-    //   }
     default:
       return state
   }

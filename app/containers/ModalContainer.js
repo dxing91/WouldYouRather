@@ -5,24 +5,20 @@ import { bindActionCreators } from 'redux'
 import * as modalActions from 'store/modal'
 import { Modal } from 'components'
 
-class ModalContainer extends Component {
-  render() {
-    return (
-      <Modal {...this.props} />
-    )
-  }
+function validateFields(firstDecisionText, secondDecisionText) {
+  return firstDecisionText.length > 0 &&
+    firstDecisionText.length <= 140 &&
+    secondDecisionText.length > 0 &&
+    secondDecisionText.length <= 140
 }
-
-// ModalContainer.propTypes = {
-
-// }
 
 function mapStateToProps(state) {
   return {
     isOpen: state.modal.isOpen,
     firstDecisionText: state.modal.firstDecisionText,
     secondDecisionText: state.modal.secondDecisionText,
-    userInfo: state.users[state.users.authedId].info
+    userInfo: state.users[state.users.authedId].info,
+    validateFields: validateFields(state.modal.firstDecisionText, state.modal.secondDecisionText)
   }
 }
 
@@ -30,4 +26,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(modalActions, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(Modal)

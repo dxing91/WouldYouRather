@@ -35,9 +35,11 @@ class MainContainer extends Component {
     const { isFetching, isAuthed } = this.props
     if (isFetching) return null
     return (
-      <div>
+      <div style={{height: '100%'}}>
         <Navigation isAuthed={isAuthed} />
-        {this.props.children}
+        <div className='content'>
+          {this.props.children}
+        </div>
       </div>
     )
   }

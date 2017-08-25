@@ -1,4 +1,4 @@
-import { saveDecision } from 'helpers/api'
+import { saveDecisionFb } from 'helpers/api'
 
 export const OPEN_MODAL = 'OPEN_MODAL'
 export const CLOSE_MODAL = 'CLOSE_MODAL'
@@ -16,17 +16,17 @@ export function closeModal() {
   }
 }
 
-export function updateModalText(type, text) {
+export function updateModalText(textType, text) {
   return {
     type: UPDATE_MODAL_TEXT,
-    type,
+    textType,
     text
   }
 }
 
 export function saveAndCloseModal(decision) {
   return function(dispatch) {
-    saveDecision(decision)
+    saveDecisionFb(decision)
       .then(() => dispatch(closeModal()))
       .catch((error) => console.warn('Error saving decision.', error))
   }
@@ -46,14 +46,12 @@ export default function modal(state = initialState, action) {
         isOpen: true
       }
     case CLOSE_MODAL:
+      return initialState
+    case UPDATE_MODAL_TEXT:
       return {
         ...state,
-        isOpen: false
+        [action.textType]: action.text
       }
-    // case UPDATE_MODAL_TEXT:
-    //   return {
-    //     ...state
-    //   }
     default:
       return state
   }

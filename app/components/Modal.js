@@ -5,33 +5,33 @@ import { formatDecision } from 'helpers/utils'
 export default function Modal(props) {
   const { isOpen, openModal, closeModal,
     firstDecisionText, secondDecisionText, updateModalText,
-    saveAndCloseModal, userInfo } = props
+    saveAndCloseModal, userInfo, validateFields } = props
   return (
     <span onClick={openModal}>
-      New Decision
+      <span className='nav__link'>NEW</span>
       <ReactModal isOpen={isOpen} onRequestClose={closeModal}>
-        <div>
-          <span>Would You Rather</span>
-          <span onClick={closeModal}>X</span>
-        </div>
-        <div>
+        <h3>Would You Rather</h3>
+        <div className='modal__inputs'>
           <input
+            className='modal__input'
             onChange={(e) => updateModalText('firstDecisionText', e.target.value)}
             value={firstDecisionText}
             maxLength={80}
             type='text'
-            placeholder='First option' />
-        </div>
-        <div>
+            placeholder='Option #1' />
           <input
+            className='modal__input'
             onChange={(e) => updateModalText('secondDecisionText', e.target.value)}
             value={secondDecisionText}
             maxLength={80}
             type='text'
-            placeholder='Second option' />
+            placeholder='Option #2' />
         </div>
-        <button onClick={saveAndCloseModal(formatDecision(firstDecisionText, secondDecisionText, userInfo))}>
-          Submit
+        <button
+          className='button'
+          onClick={() => saveAndCloseModal(formatDecision(firstDecisionText, secondDecisionText, userInfo))}
+          disabled={!validateFields}>
+          SUBMIT
         </button>
       </ReactModal>
     </span>

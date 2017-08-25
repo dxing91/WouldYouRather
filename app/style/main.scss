@@ -1,3 +1,183 @@
-.main {
-  color: pink;
+html, body, #app {
+  height: 100%;
+}
+
+body {
+  font-family: 'Open Sans', arial;
+}
+
+.nav {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-content: center;
+  padding: 20px;
+  background-color: black;
+  color: white;
+
+  &__logo {
+    padding: 20px 0;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;   
+  }
+
+  &__link {
+    padding: 20px 15px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(255,255,255,0.3);
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: stretch;
+  height: 100%;
+  margin-top: -58px;
+}
+
+.main-container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.list {
+  justify-content: flex-start;
+  align-items: stretch;
+  width: 100%;
+  padding-top: 58px;
+  text-align: center;
+}
+
+.list-item {
+  margin: 10px;
+  padding: 30px;
+  background-color: #e3e3e3;
+  cursor: pointer;
+
+  &__answered {
+    border-left: 2px solid red;
+  }
+
+  &__h3 {
+    margin: 0;
+  }
+
+  &__p {
+    margin-bottom: 0;
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  &:hover {
+    background-color: #e8e8e8;
+  }
+}
+
+.decision {
+  justify-content: flex-start;
+  align-items: stretch;
+  width: 100%;
+  padding-top: 58px;
+  text-align: center;
+
+  &__options {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+  }
+
+  &__option {
+    flex-grow: 1;
+    width: 50%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+    align-items: center;
+    height: 250px;
+    margin: 5px;
+    background-color: #e3e3e3;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #e6e6e6;
+    }
+  }
+
+  &__or {
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+    text-align: center;
+    line-height: 50px;
+    background-color: black;
+    font-weight: 500;
+    color: white;
+  }
+
+  &__percentage {
+    margin: 0;
+    font-size: 48px;
+  }
+}
+
+.ReactModal__Content {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-around;
+  align-items: center;
+  height: 250px;
+  width: 250px;
+  margin: auto;
+  border: none !important;
+  border-radius: 0 !important;
+  background-color: black !important;
+  color: white !important;
+}
+
+.modal {
+  &__inputs {
+    width: 100%;
+  }
+
+  &__input {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: none;
+    box-sizing: border-box;
+  }
+}
+
+.button {
+  padding: 10px;
+  color: white;
+  background-color: #365899;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #4267ad;
+  }
+
+  &:disabled {
+    background-color: #666666;
+  }
 }

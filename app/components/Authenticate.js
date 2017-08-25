@@ -3,7 +3,7 @@ import { FacebookAuthButton } from 'components'
 
 export default function Authenticate({isFetching, error, onAuth}) {
   return (
-    <div>
+    <div className='main-container'>
       <h1>Log in</h1>
       {error
         ? <p>There was an error.</p>

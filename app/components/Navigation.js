@@ -5,14 +5,22 @@ import { ModalContainer } from 'containers'
 
 export default function Navigation({isAuthed}) {
   return isAuthed
-    ? <div>
-        <Link to='/'>Home</Link>
-        <ModalContainer />
-        <Link to='logout'>Log out</Link>
+    ? <div className='nav'>
+        <span>
+          <Link className='nav__logo' to='/'>WYR</Link>
+        </span>
+        <span>
+          <ModalContainer />
+          <Link className='nav__link' to='logout'>LOG OUT</Link>
+        </span>
       </div>
-    : <div>
-        <Link to='/'>Home</Link>
-        <Link to='authenticate'>Log in</Link>
+    : <div className='nav'>
+        <span>
+          <Link className='nav__logo' to='/'>WYR</Link>
+        </span>
+        <span>
+        <Link className='nav__link' to='authenticate'>Log in</Link>
+        </span>
       </div>
 }
 
