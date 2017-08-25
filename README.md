@@ -7,3 +7,4 @@ A simple 'Would You Rather' game application which demonstrates facebook authori
 1. Clone to your local machine using ```git clone https://github.com/dxing91/WouldYouRather.git```
 2. Run ```npm install```
 3. Start application using ```npm run start```
+4. Access application at http://localhost:8080
